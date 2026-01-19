@@ -1,0 +1,449 @@
+{
+	"info": {
+		"_postman_id": "1b0daf2e-b50b-41de-bd23-76442fb20800",
+		"name": "wdv353-moduletwo",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "5163548",
+		"_collection_link": "https://probablyonsale.postman.co/workspace/d064bdd8-5cb2-44f0-8e4e-63d21f4eaeea/collection/5163548-1b0daf2e-b50b-41de-bd23-76442fb20800?action=share&source=collection_link&creator=5163548"
+	},
+	"item": [
+		{
+			"name": "users",
+			"item": [
+				{
+					"name": "Create user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"  pm.response.to.have.status(201);",
+									"});",
+									"pm.test(\"Reponse has created resource ID\", function() {",
+									"    const responseBody = pm.response.json();",
+									"    pm.expect(responseBody.data).to.have.property(\"_id\").that.is.not.null;",
+									"    pm.expect(responseBody.data._id).to.have.lengthOf(24);",
+									"",
+									"    pm.collectionVariables.set(\"userId\", responseBody.data._id);",
+									"})",
+									"pm.test(\"Response has properties\", () => {",
+									"    const { data } = pm.response.json();",
+									"    pm.expect(data.username).to.be.a('string');",
+									"    pm.expect(data.username).to.be.eql('admin');",
+									"",
+									"    pm.expect(data.age).to.be.a('number');",
+									"    pm.expect(data.age).to.be.eql(28);    ",
+									"",
+									"    pm.expect(data.password).to.be.a('string');",
+									"    pm.expect(data.password).to.be.eql('Password');",
+									"})"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"admin\",\n    \"password\": \"Password\",\n    \"age\": \"28\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/v1/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all users",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", () => {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"Response contains an array of users\", () => {",
+									"    const { data } = pm.response.json();",
+									"    pm.expect(data).to.be.an(\"array\");",
+									"});",
+									"pm.test(\"Users do not include password or __v\", () => {",
+									"    const { data } = pm.response.json();",
+									"    if (data.length > 0) {  ",
+									"        pm.expect(data[0]).to.not.have.property(\"password\");",
+									"        pm.expect(data[0]).to.not.have.property(\"__v\");",
+									"    }",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/api/v1/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get user by userId",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", () => {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Returned user matches requested ID\", () => {",
+									"    const responseBody = pm.response.json();",
+									"    pm.expect(responseBody.data._id).to.eql(pm.collectionVariables.get(\"userId\"));",
+									"});",
+									"",
+									"pm.test(\"User does not include password or __v\", () => {",
+									"    const { data } = pm.response.json();",
+									"    pm.expect(data).to.not.have.property(\"password\");",
+									"    pm.expect(data).to.not.have.property(\"__v\");",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"user\": \"696e9d37ce5752cfea32f247\",\n    \"username\": \"Test\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/v1/users/{{userId}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"{{userId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit user by userId",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", () => {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"User updated with correct type\", () => {",
+									"    const { data } = pm.response.json();",
+									"    pm.expect(data.age).to.be.a('number');",
+									"    pm.expect(data.username).to.be.a('string');",
+									"    pm.expect(data.password).to.be.a('string');",
+									"});",
+									"",
+									"pm.test(\"Returned userId has not been changed\", () => {",
+									"    const { data } = pm.response.json();",
+									"    pm.expect(data._id).to.eql(pm.collectionVariables.get(\"userId\"));",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"age\": \"30\",\n    \"username\": \"admiun\",\n    \"passweord\": \"Password123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/v1/users/{{userId}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"{{userId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete user by userId",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", () => {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"User deleted\", () => {",
+									"    const { message } = pm.response.json();",
+									"    pm.expect(message).to.eql(\"User deleted successfully\");",
+									"});",
+									"",
+									"pm.test(\"Deleted user ID matches requested ID\", () => {",
+									"    const { data } = pm.response.json();",
+									"    pm.expect(data._id).to.eql(pm.collectionVariables.get(\"userId\"));",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/v1/users/{{userId}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"{{userId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "posts",
+			"item": [
+				{
+					"name": "Create post",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"user\": \"696bca4d6e7233b0a8ba618d\",\n    \"title\": \"New Post\",\n    \"content\": \"This is a new post\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/v1/posts",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"posts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all posts",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/api/v1/posts",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"posts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get post by postId",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/api/v1/posts/{postId}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"posts",
+								"{postId}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit post by postId",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Updated Post\",\n    \"content\": \"This is am updated post\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/v1/posts/{postId}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"posts",
+								"{postId}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delet post by postId",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"iconEdit\",\n    \"password\": \"Password\",\n    \"fname\": \"Terryn\",\n    \"lname\": \"Rivera\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/v1/posts/{postId}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"posts",
+								"{postId}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "userId",
+			"value": ""
+		}
+	]
+}
