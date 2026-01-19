@@ -5,8 +5,9 @@ import User from "../models/user.js";
 // Populates the user field so we can see the username instead of just the ID
 export const getAllPosts = async (req, res, next) => {
     try {
-        const posts = await Post.find().populate("user", "username");
-
+        const posts = await Post.find()
+            .select("-__v")
+            .populate("user", "username");
         res.status(200).json({
             success: true,
             data: posts,
@@ -20,7 +21,9 @@ export const getAllPosts = async (req, res, next) => {
 export const getPost = async (req, res, next) => {
     try {
         const { postId } = req.params;
-        const post = await Post.findById(postId).populate("user", "username");
+        const post = await Post.findById(postId)
+            .select("-__v")
+            .populate("user", "username");
         // If the post doesn't exist, return a 404
         if (!post) {
             return res.status(404).json({
