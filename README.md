@@ -1,6 +1,4 @@
 # WDV353 Module Two –  ShufflePost
-
-
 ---
 
 ## Technologies Used
@@ -10,7 +8,7 @@
 - Express
 - MongoDB
 - Mongoose
-- JWT Authentication (access + refresh tokens)
+- JWT Authentication
 - Morgan
 - Postman
 
@@ -27,14 +25,17 @@
 backend/
   app/
     controllers/
+      userController.js
       authController.js
       postController.js
     middleware/
       authenticate.js
+      queryString.js
     models/
       post.js
       user.js
     routes/
+      authRouter.js
       authRouter.js
       postRouter.js
     db/
