@@ -1,14 +1,25 @@
-# WDV353 Module Two - Assignment (POSTIT)
+# WDV353 Module Two –  ShufflePost
+
+
+---
 
 ## Technologies Used
+
+### Backend
 - Node.js
 - Express
 - MongoDB
 - Mongoose
+- JWT Authentication (access + refresh tokens)
 - Morgan
 - Postman
-- JWT authentication
 
+### Frontend
+- React
+- React Router v6
+- Styled-Components
+- React Icons
+- Vite
 ---
 
 ## Project Structure
@@ -16,109 +27,99 @@
 backend/
   app/
     controllers/
-      postController.js
-      userController.js
       authController.js
+      postController.js
     middleware/
       authenticate.js
-      queryString.js
     models/
       post.js
       user.js
     routes/
-      index.js
       authRouter.js
       postRouter.js
-      userRouter.js
     db/
       config.js
+    utils/
+      authToken.js
     index.js
+  tests/
+client/
+  public/
+  src/
+    assets/
+    components/
+    context/
+    pages/
+    utils/
+    App.jsx
+    main.jsx
 server.js
 README.md
-```
+````
 
 ---
 
 ## Models
 
 ### User Model
-The User model stores basic user information.
 - username (String, required)
 - password (String, required)
-- role (String, default "user")
+- role (String, default: "user")
+- active (Boolean)
 - age (Number)
 - posts (Array)
-- active (Boolean)
-
----
+- createdAt / updatedAt
 
 ### Post Model
-The Post model represents posts created by users.
 - title (String, required)
 - content (String, required)
 - likes (Number)
-- user (ObjectId reference to User)
-
-Each post stores the `_id` of a user to create a relationship between the two collections.
+- hidden (Boolean)
+- anonymous (Boolean)
+- likedBy (Array)
+- dislikedBy (Array)
+- user (ObjectId reference)
+- createdAt / updatedAt
 
 ---
 
 ## API Routes
 
-### Users
-- GET /api/v1/users – Get all users
-- GET /api/v1/users/:userId – Get a user by ID
-- POST /api/v1/users – Create a new user -> NO LONGER IN USE
-- PUT /api/v1/users/:userId – Update a user
-- DELETE /api/v1/users/:userId – Delete a user
-
----
+### Auth
+POST /api/auth/register  
+POST /api/auth/login  
+POST /api/auth/refresh  
+POST /api/auth/logout  
 
 ### Posts
-- GET /api/v1/posts – Get all posts
-- GET /api/v1/posts/:postId – Get a post by ID
-- POST /api/v1/posts – Create a new post (requires a valid user ID)
-- PUT /api/v1/posts/:postId – Update a post
-- DELETE /api/v1/posts/:postId – Delete a post
+GET    /api/posts/random  
+POST   /api/posts  
+GET    /api/posts/user  
+PUT    /api/posts/:postId  
+DELETE /api/posts/:postId  
+POST   /api/posts/:postId/like  
 
 ---
-
-### Auth
-- POST /api/v1/auth/register - Creates a new user
-- POST /api/v1/auth/login - Login a user (returns token, userdata)
-
-## Postman Testing
-A Postman collection was created to test all endpoints.
-Each request includes multiple tests to validate:
-- Status codes
-- Response payload structure
-- Correct creation, updates, and deletions
-- Error handling for invalid requests
-
-Collection variables are used to store IDs, tokens, etc between requests.
-
-## Requirements
-- Node.js
-- MongoDB (local or Atlas)
 
 ## Environment Setup
 
-Make sure to create a `.env` file in the root of the project.
-Example `.env` file:
-```env
-PORT=3000
-MONGO_URL=mongodb://127.0.0.1:27017/wdv353
-JWT_SECRET="SecretKey123"
-REFRESH_SECRET="SecretKey321"
+.env (backend)
 ```
-Install dependencies:
+PORT=3000  
+MONGO_URL=mongodb://127.0.0.1:27017/wdv353  
+JWT_SECRET=SecretKey123  
+REFRESH_SECRET=SecretKey321  
+```
+.env.local (client)
+```
+VITE_API_URL=http://localhost:3000/api/v1/
+```
+---
 
-`npm install`
-
-Run the local server:
-
-`npm run dev`
-
-The API should now be running on:
-
-`http://localhost:3000`
+## Running the Project
+```
+npm install  
+npm run dev  
+```
+Backend: http://localhost:3000  
+Client: http://localhost:5173  
