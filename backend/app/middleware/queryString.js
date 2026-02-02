@@ -1,6 +1,6 @@
 export const queryString = (model, populate) => async (req, res, next) => {
     try {
-        const { page = 1, limit = 20, select, sort, ...filters } = req.query;
+        const { page = 1, limit = 10, select, sort, ...filters } = req.query;
         // Filter
         let queryStr = JSON.stringify(filters);
         queryStr = queryStr.replace(

@@ -8,20 +8,6 @@ export const getAllUsers = async (req, res, next) => {
         next(err);
     }
 };
-// Create a new user
-// Expects the required user fields in the request body
-// NO LONGER IN USE / OUTDATED
-export const createUser = async (req, res, next) => {
-    try {
-        const user = await User.create(req.body);
-        res.status(201).json({
-            success: true,
-            data: user
-        });
-    } catch (err) {
-        next(err);
-    }
-};
 // Get a single user by ID
 // Uses the ID passed in through the route parameters
 export const getUser = async (req, res, next) => {

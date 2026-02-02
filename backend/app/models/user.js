@@ -20,18 +20,24 @@ const userSchema = new mongoose.Schema(
 			type: String,
 			default: "user",
 		},
-    active: {
-      type: Boolean,
-      default: true,
-    },
-    posts: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Post",
-      }
-    ]
+		email: {
+			type: String,
+			required: true,
+			unique: true,
+		},
+		active: {
+			type: Boolean,
+			default: true,
+		},
+		posts: [{
+			type: mongoose.Schema.Types.ObjectId,
+			ref: "Post",
+		}],
+		refreshTokens: [{
+			jti: { type: String, required: true },
+			createdAt: { type: Date, default: Date.now },
+		}],
 	},
 	{ timestamps: true }
 );
-
 export default mongoose.model("User", userSchema);
