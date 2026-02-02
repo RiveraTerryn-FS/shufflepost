@@ -1,13 +1,13 @@
 {
-  "name": "wdv353-moduletwo",
+  "name": "shufflepost",
   "version": "1.0.0",
   "type": "module",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
-    "dev:server": "npm run dev --prefix backend",
-    "dev:client": "npm run dev --prefix client"
+    "test": "jest tests",
+    "start": "node server.js",
+    "dev": "nodemon server.js"
   },
   "keywords": [],
   "author": "",

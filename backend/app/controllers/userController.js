@@ -3,24 +3,7 @@ import User from "../models/user.js";
 // This is used to return every user in the database
 export const getAllUsers = async (req, res, next) => {
     try {
-        const users = await User.find().select("-password -__v");
-        res.status(200).json({
-            success: true,
-            data: users
-        });
-    } catch (err) {
-        next(err);
-    }
-};
-// Create a new user
-// Expects the required user fields in the request body
-export const createUser = async (req, res, next) => {
-    try {
-        const user = await User.create(req.body);
-        res.status(201).json({
-            success: true,
-            data: user
-        });
+        res.status(200).json(res.results);
     } catch (err) {
         next(err);
     }
@@ -30,7 +13,9 @@ export const createUser = async (req, res, next) => {
 export const getUser = async (req, res, next) => {
     try {
         const { userId } = req.params;
-        const user = await User.findById(userId).select("-password -__v");
+        const user = await User.findById(userId)
+            .select("-password -__v")
+            .populate("posts", "title content");
         // If no user is found, return a 404
         if (!user) {
             return res.status(404).json({
