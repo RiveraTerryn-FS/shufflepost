@@ -26,7 +26,7 @@ export function authenticateToken(req, res, next) {
 //  Optional authentication
 //  This allows us to use the user ID if logged in to check things
 //  such as if the user has liked a post
-export function optAuthenticateToken(req, res, next) {
+export const optAuthenticateToken = (req, res, next) => {
 	const authHeader = req.headers.authorization;
 	const token = authHeader && authHeader.split(" ")[1];
 	if (!token) {
@@ -38,7 +38,8 @@ export function optAuthenticateToken(req, res, next) {
 			req.user = null;
 			return next();
 		}
+
 		req.user = decoded;
 		next();
 	});
-}
+};
