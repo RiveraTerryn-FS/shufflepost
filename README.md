@@ -118,7 +118,10 @@ VITE_API_URL=http://localhost:3000/api/v1/
 
 ## Running the Project
 ```
-npm install  
+npm install
+cd client
+npm install
+cd ../
 npm run dev  
 ```
 Backend: http://localhost:3000  
